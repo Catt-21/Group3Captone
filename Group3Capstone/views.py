@@ -13,8 +13,8 @@ class Home(View):
         noSuchUser = False
         badPassword = False
         try:
-            m = User.objects.get(username=request.POST['username'])
-            badPassword = (m.password != request.POST['password'])
+            m = User.objects.get(UserName=request.POST['username'])
+            badPassword = (m.User_Password != request.POST['password'])
         except:
             noSuchUser = True
         if noSuchUser:
