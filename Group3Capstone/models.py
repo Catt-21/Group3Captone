@@ -9,7 +9,7 @@ class AccountType(models.TextChoices):
 
 class User(models.Model):
    User_ID = models.BigAutoField(primary_key=True)
-   User_Password = models.CharField(max_length=20, unique=True, blank=True)
+   User_Password = models.CharField(max_length=20, blank=True)
    User_FName = models.CharField(max_length=40, null=True)
    User_LName = models.CharField(max_length=40, null=True)
    User_DOB = models.DateField(auto_now=False, auto_now_add=False, null=True)
@@ -29,6 +29,7 @@ class Group(models.Model):
    Group_Id = models.BigAutoField(primary_key=True)
    Group_Name = models.CharField(max_length=20, unique=True, blank=True)
    Sport = models.ForeignKey(Sport, on_delete=models.CASCADE, null=True)
+   Group_Description = models.CharField(max_length=256, null=True)
    Creator = models.ForeignKey(User, related_name='Group_Creator' , on_delete=models.CASCADE, null=True)
    SpotsAvailable = models.IntegerField(null=True)
    Joined_Users = models.ManyToManyField('User', related_name='Joining_User')
