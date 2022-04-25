@@ -278,26 +278,25 @@ class GroupEventsPage(View):
         id = kwargs['group_id']
         currGroup = Group.objects.get(Group_Id=id)
         users = currGroup.Joined_Users.all()
-
         groupPostArray = []
         allEvents = Event.objects.all()
         result = list(filter(lambda x: (x.Group == currGroup), allEvents))
         result = filter(lambda x: (x.Date > timezone.now()), result)
 
         try:
-            groupPostArray = GroupPost.objects.get(Group=currGroup)
+            groupPostArray = GroupPost.objects.filter(Group=currGroup)
         except GroupPost.DoesNotExist:
             return render(request, "groupEventsPage.html",
                           {"group": currGroup, "events": result, "users": users, "posts": groupPostArray})
 
-
-
-        return render(request, "groupEventsPage.html", {"group": currGroup, "events": result, "users": users, "posts": groupPostArray })
+        return render(request, "groupEventsPage.html",
+                      {"group": currGroup, "events": result, "users": users, "posts": groupPostArray})
 
     def post(self, request, *args, **kwargs):
         id = kwargs['group_id']
+        currentUser = User.objects.get(UserName=request.session["username"])
         currGroup = Group.objects.get(Group_Id=id)
-
+        groupPostArray = []
         users = currGroup.Joined_Users.all()
 
         if 'createEvent' in request.POST:
@@ -314,6 +313,7 @@ class GroupEventsPage(View):
         result = list(filter(lambda x: (x.Group == currGroup), allEvents))
         result = filter(lambda x: (x.Date > timezone.now()), result)
 
+
         if 'joinEvent' in request.POST:
             eventID = request.POST.get('joinEvent')
             currentUser = User.objects.get(UserName=request.session["username"])
@@ -321,12 +321,20 @@ class GroupEventsPage(View):
 
             try:
                 Reservation.objects.get(User=currentUser, Event=currentEvent)
-                return render(request, "groupEventsPage.html", {"group": currGroup, "events": result, "users": users, })
             except Reservation.DoesNotExist:
                 reservation = Reservation(User=currentUser, Event=currentEvent)
                 reservation.save()
 
-        return render(request, "groupEventsPage.html", {"group": currGroup, "events": result, "users": users, })
+        if 'createGroupPost' in request.POST:
+            title = request.POST['Title']
+            groupBodyText = request.POST['GroupPostText']
+            date = timezone.now()
+            newPost = GroupPost(Creator=currentUser, Group=currGroup, Title=title, BodyText=groupBodyText, Date=date)
+
+            newPost.save()
+
+        return render(request, "groupEventsPage.html",
+                      {"group": currGroup, "events": result, "users": users, "posts": groupPostArray})
 
 
 class Events(View):

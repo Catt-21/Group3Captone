@@ -116,12 +116,12 @@
                            data-bs-desc="{{ i.Event_Description }}" data-bs-date="{{ i.Date.date }}"
                            data-bs-time="{{ i.Date.time }}">
                             <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1" style="padding-right: 10px">{{ i.Event_Name }}</h5>
+                                <h5 class="mb-1" style="padding-right: 10px">{{ i.Title }}</h5>
                                 <small>{{ i.Date.date }}</small>
                             </div>
                             <p class="mb-1"
-                               style="text-overflow-ellipsis: ellipsis ellipsis; ">{{ i.Event_Description }}</p>
-                            <small>{{ i.Location }}</small>
+                               style="text-overflow-ellipsis: ellipsis ellipsis; ">{{ i.BodyText }}</p>
+                            <small>{{ i.User }}</small>
                         </a>
                     {% endfor %}
                 </ul>
@@ -147,7 +147,7 @@
     </div>
 </div>
 
-
+<!-- Modal For Create a GroupPost popup-->
 <div class="modal fade" id="createGroupPost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
