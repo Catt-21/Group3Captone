@@ -43,12 +43,7 @@ class Dashboard(View):
         # using this variable from account view can now pass to a template via context and get whatever data needed
         u = User.objects.get(UserName=request.session['username'])
 
-        print("\n" + uTest + "\n")
-        print("\n" + u.User_FName)
-
-        sports = list(Sport.objects.all().values())
-
-        return render(request, "dashboard.html", {"username": uTest, "sport": sports, "user": u})
+        return render(request, "dashboard.html", {"username": uTest, "user": u})
 
 
 class CreateAccountsPage(View):
@@ -156,7 +151,6 @@ class Groups(View):
 
         u = User.objects.get(UserName=request.session["username"])
         group = list(Group.objects.all())
-        print("\n", group)
 
         return render(request, "groups.html", {"user": u, "groups": group})
 
@@ -165,7 +159,6 @@ class Groups(View):
         currentUser = User.objects.get(UserName=request.session["username"])  # setting up user objects
 
         groupJoined = request.POST["name"]  # group ID
-        print("\n", groupJoined)  # to confirm in console that group was sent to post properly
 
         g = Group.objects.get(Group_Id=groupJoined)
         joinedUsers = list(g.Joined_Users.all())  # returns a list of all user objects
@@ -184,19 +177,13 @@ class Groups(View):
             return render(request, "groups.html", {"message": message, "groups": group})
         else:
             val = g.SpotsAvailable - 1  # if user hasn't joined group, decrease this
-            print("\n", val)
+
             g.SpotsAvailable = val
             g.save()
             g.Joined_Users.add(currentUser)
             g.save()
             groupReservation = GroupReservation(User=currentUser, Group=g)
             groupReservation.save()
-            print(g.SpotsAvailable)
-            print(list(g.Joined_Users.all()))
-
-            for i in joinedUsers:
-                print(
-                    i.User_FName)  # using 'i' to iterate through the list, can call whatever value using i because i is the object that's in the list
 
             message = "You have successfully joined a group"
             message2 = "If you'd like join another group, please click the group tab on the navigation bar up top"
@@ -214,15 +201,11 @@ class JoinedGroups(View):
         groupsToTemplate = []
 
         for i in allGroups:  # for each group in list of groups
-            print(i.Sport)
             joinedUsers = i.Joined_Users.all()  # get list of users in that group
             for u in joinedUsers:
                 if (u.UserName == currentUser.UserName):  # if our current user is in the group
-                    print("This person is in a group")
                     currentUserGroups.append(i.Group_Id)  # add that group id to list of users groups
 
-        print(currentUserGroups)
-        print(len(currentUserGroups))
 
         if (len(currentUserGroups) == 0):  # if there are no joined groups, go join dummy
             message = "You have not joined a group yet please join one by clicking on the groups tab and selecting a group"
@@ -231,7 +214,6 @@ class JoinedGroups(View):
             for i in currentUserGroups:
                 g = Group.objects.get(
                     Group_Id=i)  # getting group object to put in new list so we can get details in template
-                print(g.Sport.Sport_Name)
                 groupsToTemplate.append(g)
 
             message = "Here are the groups you are in: "
@@ -247,11 +229,8 @@ class CreateGroupPage(View):
         sport = request.POST['Sport']
         maxCount = request.POST['Max_Players']
         groupDescription = request.POST['Group_Description']
-        sportObj = Sport(Sport_Name=sport)
 
-        sportObj.save()
-
-        newGroup = Group(Sport=sportObj, Group_Description=groupDescription, Group_Name=groupName,
+        newGroup = Group(Sport=sport, Group_Description=groupDescription, Group_Name=groupName,
                          SpotsAvailable=maxCount)
         message_dict = []
         # error_dict = validate_user(user)
@@ -262,7 +241,7 @@ class CreateGroupPage(View):
         except IntegrityError:
             return render(request, "createGroupPage.html", "")
         else:
-            return render(request, "home.html", {"errors": valid})
+            return render(request, "groups.html", {"errors": valid})
         # else:
         # return render(request, "create_user.html", {"errors": error_dict})
 

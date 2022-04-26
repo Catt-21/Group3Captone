@@ -22,15 +22,11 @@ class User(models.Model):
     Account_type = models.CharField(max_length=1, choices=AccountType.choices, default=AccountType.Administrator)
 
 
-class Sport(models.Model):
-    Sport_Id = models.BigAutoField(primary_key=True)
-    Sport_Name = models.CharField(max_length=40, null=True)  # just the name....
-
 
 class Group(models.Model):
     Group_Id = models.BigAutoField(primary_key=True)
     Group_Name = models.CharField(max_length=20, unique=True, blank=True)
-    Sport = models.ForeignKey(Sport, on_delete=models.CASCADE, null=True)
+    Sport = models.CharField(max_length=50, unique=True, blank=True)
     Group_Description = models.CharField(max_length=256, null=True)
     Creator = models.ForeignKey(User, related_name='Group_Creator', on_delete=models.CASCADE, null=True)
     SpotsAvailable = models.IntegerField(null=True)

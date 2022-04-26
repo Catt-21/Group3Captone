@@ -52,7 +52,7 @@
     <table class="table table-striped table-bordered table-hover table-condensed">
         {% for i in joined_groups %}
         <tr><td>
-            {{ i.Sport.Sport_Name }} - {{ i.Creator.User_FName }}
+            {{ i.Group_Name }}
            <div><a href="{%  url 'GroupEventsPage' i.Group_Id %}" class="btn btn-info" name="createGroup" role="button">Go to Group Page</a></div>
         </td></tr>
         {% endfor %}

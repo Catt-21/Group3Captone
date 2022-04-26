@@ -99,7 +99,7 @@
     </div>
 </div>
 
-
+<!-- Shows group posts -->
 <div class="container">
     <div class="row">
         <div class="col-lg-12 ">
@@ -111,17 +111,16 @@
                     style="max-height: 350px; min-width: 24rem; overflow-x: hidden !important;">
                     {% for i in posts %}
                         <a href="#" class="list-group-item list-group-item-action" aria-current="true"
-                           data-bs-toggle="modal" data-bs-target="#exampleModal2" data-bs-title="{{ i.Event_Name }}"
-                           data-bs-id="{{ i.Event_Id }}" data-bs-loc="{{ i.Location }}"
-                           data-bs-desc="{{ i.Event_Description }}" data-bs-date="{{ i.Date.date }}"
+                           data-bs-toggle="modal" data-bs-target="#exampleModal2" data-bs-title="{{ i.Title}}"
+                           data-bs-desc="{{ i.BodyText}}" data-bs-date="{{ i.Date.date }}"
                            data-bs-time="{{ i.Date.time }}">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1" style="padding-right: 10px">{{ i.Title }}</h5>
                                 <small>{{ i.Date.date }}</small>
                             </div>
                             <p class="mb-1"
-                               style="text-overflow-ellipsis: ellipsis ellipsis; ">{{ i.BodyText }}</p>
-                            <small>{{ i.User }}</small>
+                               style="text-overflow-ellipsis: ellipsis ellipsis; "></p>
+                            <small>- {{ i.Creator.User_FName }} {{ i.Creator.User_LName }}</small>
                         </a>
                     {% endfor %}
                 </ul>

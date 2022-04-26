@@ -50,12 +50,9 @@
 <p class="fs-1">Welcome, {{ user.User_FName }}!</p>
 <br>
     <table class="table table-striped table-bordered table-hover table-condensed">
-        {% for s in sport %}
-            <tr><td>{{ s.Sport_Name }}</td></tr>
-        {% endfor %}
         <br>
         {% for g in group %}
-            <tr><td>{{ g.Sport }}, {{ g.Creator }}</td></tr>
+            <tr><td>{{ g.Group_Name }}</td></tr>
         {% endfor %}
     </table>
 <br>
